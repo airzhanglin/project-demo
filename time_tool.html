@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>时间转换</title>
+    <style>
+        * {
+            margin: 0;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .wraper {
+            width: 750px;
+            margin: auto
+        }
+
+        .list {
+            margin-top: 20px;
+        }
+
+        .time-box {
+            margin-top: 20px;
+        }
+
+        .list label {
+            text-align: right;
+            vertical-align: middle;
+            float: left;
+            font-size: 14px;
+            color: #48576a;
+            line-height: 1;
+            padding: 11px 12px 11px 0;
+            box-sizing: border-box;
+        }
+
+        .content {
+            position: relative;
+            margin-left: 100px;
+            margin-right: 330px;
+            font-size: 14px;
+            line-height: 36px;
+        }
+
+        input {
+            width: 270px;
+            background-color: #fff;
+            background-image: none;
+            border-radius: 4px;
+            border: 1px solid #bfcbd9;
+            box-sizing: border-box;
+            color: #1f2d3d;
+            font-size: inherit;
+            height: 36px;
+            line-height: 1;
+            outline: 0;
+            padding: 3px 10px;
+            transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
+        }
+
+        .right-op {
+            float: right;
+            width: 350px;
+            font-size: 14px;
+            line-height: 36px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wraper">
+        <div class="list">
+            <h3 class="text-center">日期时间转化为时间戳工具</h3>
+            <div class="time-box">
+                <label for="">输入时间日期</label>
+                <div class="right-op">
+                    <button class="btn" onclick="changeDatetime()">点击转换</button>
+                    <span>转化的时间戳为：
+                        <span id="timestamp"></span>
+                    </span>
+                </div>
+                <div class="content">
+                    <input type="text" id="datetime" placeholder="输入时间日期：yyyy-MM-dd hh:mm:ss">
+                </div>
+
+            </div>
+        </div>
+        <div class="list">
+            <h3 class="text-center">时间戳转化时间日期工具</h3>
+            <div class="time-box">
+                <label for="">输入时间日期</label>
+                <div class="right-op">
+                    <button class="btn" onclick="changeDate()">点击转换</button>
+                    <span>转化的日期时间为：
+                        <span id="dateTime"></span>
+                    </span>
+                </div>
+                <div class="content">
+                    <input type="text" id="date" placeholder="输入时间戳">
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    function changeDatetime() {
+        var stringTime = document.getElementById('datetime').value;
+        var reg = /^(\d{1,4})(-|\/)(\d{1,2})\2(\d{1,2}) (\d{1,2}):(\d{1,2}):(\d{1,2})$/;
+        var r = stringTime.match(reg);
+        if (r == null) {
+            alert("输入格式不正确，请按yyyy-MM-dd HH:mm:ss的格式输入！");
+            return false;
+        } else {
+            var timestamp2 = Date.parse(new Date(stringTime));
+            timestamp2 = timestamp2 / 1000;
+            console.log(stringTime + "的时间戳为：" + timestamp2);
+            document.getElementById('timestamp').innerHTML = timestamp2
+        }
+
+    }
+    function changeDate() {
+        var timestamp = document.getElementById('date').value;
+        if (timestamp) {
+            console.log(!isNaN(timestamp))
+            if (!isNaN(timestamp)) {
+                var newDate = new Date();
+                newDate.setTime(timestamp * 1000);
+                console.log(newDate.format('yyyy-MM-dd hh:mm:ss'));
+                document.getElementById('dateTime').innerHTML = newDate.format('yyyy-MM-dd hh:mm:ss')
+            }else{
+                alert('请输入正确的时间戳')
+            }
+        }else{
+            alert('请输入时间戳')
+        }
+
+    }
+
+    Date.prototype.format = function (format) {
+        var date = {
+            "M+": this.getMonth() + 1,
+            "d+": this.getDate(),
+            "h+": this.getHours(),
+            "m+": this.getMinutes(),
+            "s+": this.getSeconds(),
+            "q+": Math.floor((this.getMonth() + 3) / 3),
+            "S+": this.getMilliseconds()
+        };
+        if (/(y+)/i.test(format)) {
+            format = format.replace(RegExp.$1, (this.getFullYear() + '').substr(4 - RegExp.$1.length));
+        }
+        for (var k in date) {
+            if (new RegExp("(" + k + ")").test(format)) {
+                format = format.replace(RegExp.$1, RegExp.$1.length == 1
+                    ? date[k] : ("00" + date[k]).substr(("" + date[k]).length));
+            }
+        }
+        return format;
+    }
+</script>
+
+</html>
